@@ -1,6 +1,5 @@
 #include "Fecha.hpp"
 #include <iostream>
-#
 
 
 int masVieja(Fecha *f1, Fecha *f2) {

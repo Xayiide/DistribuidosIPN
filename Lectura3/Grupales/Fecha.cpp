@@ -20,8 +20,8 @@ Fecha::Fecha(int dd, int mm, int yyyy) : dia(dd),
 		std::cout << "Year debe estar entre 0 y 2020\n";
 		exit(1);
 	}
-	memset(array, '\0', 8192);
-	memset(darray, '\0', 8192);
+	// memset(array, '\0', 8192);
+	// memset(darray, '\0', 8192);
 }
 
 int Fecha::getYear() {
