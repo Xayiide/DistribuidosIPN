@@ -9,8 +9,8 @@ Rectangulo::Rectangulo(double xSupIzq, double ySupIzq,
 	superiorIzq(xSupIzq, ySupIzq), inferiorDer(xInfDer, yInfDer) { }
 
 Rectangulo::Rectangulo(Coordenada supIzq, Coordenada infDer) :
-	superiorIzq(supIzq.obtenerX(), supIzq.obtenerY()),
-	inferiorDer(infDer.obtenerX(), infDer.obtenerY()) { }
+	superiorIzq(supIzq.obtenerX(), supIzq.obtenerY(), supIzq.obtenerZ()),
+	inferiorDer(infDer.obtenerX(), infDer.obtenerY(), infDer.obtenerZ()) { }
 
 void Rectangulo::imprimeEsq() {
 	std::cout << "Sup izq:" << std::endl;
