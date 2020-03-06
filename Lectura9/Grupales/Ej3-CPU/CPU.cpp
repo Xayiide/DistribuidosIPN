@@ -1,39 +1,25 @@
 #include <iostream>
-#include <string>
-#include <random>
-#include <time.h>
+#include <math.h>
 
 
 int main() {
-	int n = 85000000;
-	int i, j, k;
+	double i = 0;
+	double _sin = 0, _cos = 0, _tan = 0, _log = 0, _sqrt = 0;
 
-	std::string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; /* 26 */
-	std::string big   = "";
-
-	std::cout << "Creando palabras..." << std::endl;
-	srand(time(NULL));
-	for (i = 0; i < n; i++) {
-		for (j = 0; j < 3; j++) {
-			k = std::rand() % alpha.length() + 1;
-			big += alpha[k];
-		}
-		big += " ";
+	while (i < 100000000) {
+		_sin  += sin(i);
+		_cos  += cos(i);
+		_tan  += tan(i);
+		_log  += log(i);
+		_sqrt += sqrt(i);
+		i++;
 	}
 
-	std::cout << "Palabras creadas" << std::endl;
-	std::cout << "Tamaño de big: " << big.size() << std::endl;
-	std::cout << "Encontrando ocurrencias de IPN..." << std::endl;
-
-	size_t p = big.find("IPN", 0);
-	int ipns = 0;
-	while (p != std::string::npos) {
-		ipns++;
-		p = big.find("IPN", p + 1);
-	}
-
-	std::cout << "Numero de apariciones de IPN: " << ipns << std::endl;
+	std::cout << "Sin : " << _sin  << std::endl;
+	std::cout << "Cos : " << _cos  << std::endl;
+	std::cout << "tan : " << _tan  << std::endl;	
+	std::cout << "Log : " << _log  << std::endl;
+	std::cout << "sqrt: " << _sqrt << std::endl;
 
 	return 0;
-
 }

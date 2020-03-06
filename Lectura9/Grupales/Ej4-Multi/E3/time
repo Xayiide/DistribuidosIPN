@@ -1,11 +1,15 @@
 Waiting...
-Creando palabras...
-Creando palabras...
-Palabras creadas
-Tamaño de big: 340000000
-Encontrando ocurrencias de IPN...
-Palabras creadas
-Tamaño de big: 340000000
-Encontrando ocurrencias de IPN...
-Numero de apariciones de IPN: 4783
-Numero de apariciones de IPN: 4778
+Sin : 0.78201
+Cos : 1.53437
+tan : -5.55003e+07
+Log : -inf
+sqrt: 6.66667e+11
+Sin : 0.78201
+Cos : 1.53437
+tan : -5.55003e+07
+Log : -inf
+sqrt: 6.66667e+11
+
+real	0m10.831s
+user	0m21.604s
+sys	0m0.000s
