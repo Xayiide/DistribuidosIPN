@@ -3,7 +3,7 @@ CC     = g++
 CGLAGS = -Wall -Wextra -g
 
 E1-token: E1-token.cpp
-	$(CC) E1-token.cpp -o E1-token $(CFLAGS)
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
 	@echo "Cleaning up..."
