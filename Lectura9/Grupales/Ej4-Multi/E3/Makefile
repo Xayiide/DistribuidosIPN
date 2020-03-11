@@ -1,4 +1,4 @@
-.PHONY = E3-CPU+CPU clean
+.PHONY = clean
 CC     = g++
 CFLAGS = -Wall -Wextra -g -lpthread
 

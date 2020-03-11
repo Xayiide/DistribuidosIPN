@@ -1,4 +1,4 @@
-.PHONY = E1-buff clean
+.PHONY = clean
 
 CC     = g++
 CFLAGS = -Wall -Wextra -g

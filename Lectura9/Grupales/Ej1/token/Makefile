@@ -1,4 +1,4 @@
-.PHONY = E1-token clean
+.PHONY = clean
 CC     = g++
 CGLAGS = -Wall -Wextra -g
 

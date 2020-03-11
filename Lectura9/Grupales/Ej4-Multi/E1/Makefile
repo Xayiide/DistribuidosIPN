@@ -1,4 +1,4 @@
-.PHONY = E1-DD+DD clean
+.PHONY = clean
 CC     = g++
 CFLAGS = -Wall -Wextra -g -lpthread
 

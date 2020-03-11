@@ -1,4 +1,4 @@
-.PHONY = RAM clean
+.PHONY = clean
 CC     = g++
 CFLAGS = -Wall -Wextra -g
 

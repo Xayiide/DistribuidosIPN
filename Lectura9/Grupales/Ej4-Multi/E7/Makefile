@@ -1,4 +1,4 @@
-.PHONY = E7-CPU+RAM+DD clean
+.PHONY = clean
 CC     = g++
 CFLAGS = -Wall -Wextra -g -lpthread
 
