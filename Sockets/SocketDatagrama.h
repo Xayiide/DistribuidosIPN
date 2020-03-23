@@ -12,6 +12,10 @@ class SocketDatagrama {
 		int recibe(PaqueteDatagrama &p); /* Recibe un paquete datagrama */
 		int envia(PaqueteDatagrama &p);  /* Envia un paquete datagrama */
 
+		sockaddr_in getlocal();
+		sockaddr_in getoutter();
+
+
 	private:
 		struct sockaddr_in direccionLocal;
 		struct sockaddr_in direccionForanea;
