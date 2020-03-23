@@ -30,8 +30,9 @@ SocketDatagrama::~SocketDatagrama() {
 }
 
 int SocketDatagrama::recibe(PaqueteDatagrama &pd) {
-	int ret, res = 0;
-	ret = recvfrom(s, &res, sizeof(int), 0, NULL, NULL);
+	int ret;
+	int res[2];
+	ret = recvfrom(s, &res, 2 * sizeof(int), 0, NULL, NULL);
 	pd.inicializaDatos((char *) res);
 	return ret;
 }
