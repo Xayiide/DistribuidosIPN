@@ -1,13 +1,17 @@
-#include "SocketDatagrama.h"
 #include <iostream>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <stdio.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <strings.h> /* bzero */
+
+#include "SocketDatagrama.h"
+
+
 using namespace std;
 int main(){
-	int res,clilen;
+	int res, clilen;
 	struct sockaddr_in server_addr, msg_to_client_addr;
 	//Crear el objeto SocketDatagrama
 	/*se asigna una direccion al socket del servidor*/

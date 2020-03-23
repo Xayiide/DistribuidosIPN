@@ -1,17 +1,18 @@
 #include "PaqueteDatagrama.h"
-#include<iostream>
-#include<stdlib.h>
-#include<string.h>
-PaqueteDatagrama::PaqueteDatagrama(char *dat, unsigned int tam, char *ipp,int puertos)
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+
+PaqueteDatagrama::PaqueteDatagrama(char *dat, unsigned int tam, char *ipp, int port)
 {
-	dat=new char[tam];
-	ipp=new char[16];
-	memcpy(ip,ipp,16);
-	longitud=tam;
-	puerto=puertos;
+	datos = new char[tam];
+	memcpy(datos, dat, sizeof(dat));
+	memcpy(ip, ipp, sizeof(ip)); /* sizeof(ip) para que no desborde */
+	longitud = tam;
+	puerto   = port;
 }
 PaqueteDatagrama::PaqueteDatagrama(unsigned int tam) : longitud(tam){
-	datos=new char[tam];
+	datos = new char[tam];
 }
 PaqueteDatagrama::~PaqueteDatagrama() {
 	delete[] datos;
@@ -29,12 +30,11 @@ char* PaqueteDatagrama::obtieneDatos(){
 	return datos;
 }
 void PaqueteDatagrama::inicializaPuerto(int p){
-	puerto=p;
+	puerto = p;
 }
 void PaqueteDatagrama::inicializaIp(char *ipp){
-	ipp=new char[16];
-	memcpy(ip,ipp,16);
+	memcpy(ip, ipp, sizeof(ip)); /* sizeof(ip) para no desbordar el array */
 }
 void PaqueteDatagrama::inicializaDatos(char *dat){
-	datos=dat;
+	datos = dat;
 }
