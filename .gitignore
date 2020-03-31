@@ -3,3 +3,6 @@ Proyecto*
 
 # Ignorar Apuntes
 Apuntes*
+
+# Ignorar la parte de addrinfo de sockets
+Sockets/addrinfo/
