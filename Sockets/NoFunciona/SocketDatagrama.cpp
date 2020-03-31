@@ -19,7 +19,7 @@ SocketDatagrama::SocketDatagrama(int port) {
 	this->s = socket(AF_INET, SOCK_DGRAM, 0);
 
 	direccionLocal.sin_family      = AF_INET;
-	direccionLocal.sin_addr.s_addr = INADDR_ANY;  /* Asigname cualquier IP */
+	direccionLocal.sin_addr.s_addr = inet_addr("127.0.0.1");  /* Asigname cualquier IP */
 	direccionLocal.sin_port        = htons(port); /* Asigname el puerto x */
 
 	bind(s, (struct sockaddr *) &direccionLocal, sizeof(direccionLocal));
@@ -47,12 +47,22 @@ int SocketDatagrama::envia(PaqueteDatagrama &pd) {
 	return ret;
 }
 
-sockaddr_in SocketDatagrama::getlocal() {
-	return direccionLocal;
+char *SocketDatagrama::getlocal() {
+	char *ip = inet_ntoa(direccionLocal.sin_addr);
+	return ip;
 }
 
-sockaddr_in SocketDatagrama::getoutter() {
-	return direccionForanea;
+char *SocketDatagrama::getoutter() {
+	char *ip = inet_ntoa(direccionForanea.sin_addr);
+	return ip;
+}
+
+int SocketDatagrama::getlocalport() {
+	return direccionLocal.sin_port;
+}
+
+int SocketDatagrama::getoutterport() {
+	return direccionForanea.sin_port;
 }
 
 

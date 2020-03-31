@@ -17,7 +17,7 @@ int main() {
 	std::cout << "num[0]: " << num[0] << "\n";
 	std::cout << "num[1]: " << num[1] << "\n";
 
-	SocketDatagrama sockClnt = SocketDatagrama(0); /* Assign any port */
+	SocketDatagrama sockClnt = SocketDatagrama(10000); /* Assign any port */
 
 	/* Lo que vamos a enviar en realidad son dos caracteres que representan
 	   dos numeros */
@@ -26,11 +26,16 @@ int main() {
 	pkt.inicializaIp("127.0.0.1"); /* IP del servidor */
 	pkt.inicializaPuerto(7200); /* Puerto en el que escucha el servidor */
 
-	sockaddr_in cl = sockClnt.getlocal();
-	sockaddr_in sv = sockClnt.getoutter();
-	std::cout << "[Client]: " << ntohs(cl.sin_port) << " : " << inet_ntoa(cl.sin_addr);
-	std::cout << "[Server]: " << ntohs(sv.sin_port) << " : " << inet_ntoa(cl.sin_addr);
+
+	char *ipclient   = sockClnt.getlocal();
+	char *ipserver   = sockClnt.getoutter();
+	int   portclient = sockClnt.getlocalport();
+	int   portserver = sockClnt.getoutterport();
+	std::cout << "[Client]: " << ipclient << ":" << portclient << "\n";
+	std::cout << "[Server]: " << ipserver << ":" << portserver << "\n";
+	std::cout << "[Server]: " << pkt.obtieneDireccion() << ":" << pkt.obtienePuerto() << "\n";
 	
+	std::cout << "Enviando los dos enteros...\n";
 	sockClnt.envia(pkt);
 	sockClnt.recibe(pkt);
 

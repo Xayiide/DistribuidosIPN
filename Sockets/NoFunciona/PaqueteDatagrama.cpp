@@ -6,7 +6,7 @@
 PaqueteDatagrama::PaqueteDatagrama(char *dat, unsigned int tam, char *ipp, int port)
 {
 	datos = new char[tam];
-	memcpy(datos, dat, sizeof(dat));
+	memcpy(datos, dat, strlen(dat));
 	memcpy(ip, ipp, sizeof(ip)); /* sizeof(ip) para que no desborde */
 	longitud = tam;
 	puerto   = port;
@@ -36,5 +36,5 @@ void PaqueteDatagrama::inicializaIp(char *ipp){
 	memcpy(ip, ipp, sizeof(ip)); /* sizeof(ip) para no desbordar el array */
 }
 void PaqueteDatagrama::inicializaDatos(char *dat){
-	datos = dat;
+	memcpy(datos, dat, strlen(dat));
 }
