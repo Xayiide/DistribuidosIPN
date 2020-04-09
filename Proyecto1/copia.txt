@@ -1,0 +1,460 @@
+/* Calcular la raiz cuadrada de un entero n utilizando el 
+ * algoritmo babilonico.
+ * Haciendo n del tipo double y resultado con 4 decimales */
+
+#include <iostream>
+#include <iomanip>
+
+
+int main(int argc, char *argv[]) {
+	double n = 0;
+	double r = 1;
+	int    i = 0;
+
+	std::cout << "Introduza un número: ";
+	std::cin  >> n;
+	std::cout << std::endl;
+
+	if (n == 0) {
+		std::cout << "Su raíz aproximada es 0" << std::endl;
+		return 0;
+	}
+
+	if (n < 0) {
+		std::cout << "El número debe ser positivo" << std::endl;
+		return 0;
+	}
+
+	for (i = 0; i < 10; i++)
+		r = (r + (n / r)) / 2;
+
+	std::cout << "Su raíz aproximada es: " << std::setprecision(4)
+		      << r << std::endl;
+	return 0;
+}
+
+***************************************************************************
+
+/* Progama que imprima la altura de un edificio si se conoce
+ * el tiempo que tardo una pelota de tenis desde que se dejo
+ * caer en la parte mas alta del edificio y hasta llegar
+ * al suelo */
+
+/* H = 0.5 * g * t^2
+ * g = 9.8 */
+
+#include <iostream>
+
+int main() {
+	float g = 9.8;
+	float t = 0;
+	float h = 0;
+
+	std::cout << "Tiempo: ";
+	std::cin  >> t;
+
+	h = 0.5 * g * t * t;
+	std::cout << "La altura del edificio es: " << h << " metros\n"; 
+
+	return 0;
+
+}
+
+***************************************************************************
+
+/* Programa que reciba de STDIN un valor entero de segundos
+ * e imprima su equivalente en h, m, s */
+#include <iostream>
+
+int main(int argc, char *argv[]) {
+	int t    = 0;
+	int hrs  = 0;
+	int min  = 0;
+	int seg  = 0;
+
+	std::cout << "Introduzca segundos > ";
+	std::cin >> t;
+	std::cout << std::endl;
+
+	if (t < 0) {
+		std::cout << "El valor debe ser positivo" << std::endl;
+		return 1;
+	}
+
+	if (t == 0) {
+		std::cout << "0 horas 0 minutos 0 segundos" << std::endl;
+		return 0;
+	}
+
+	hrs = t/3600;
+	t = t - hrs * 3600;
+
+	min = t/60;
+	t = t - min * 60;
+
+	std::cout << hrs << " horas "
+		      << min << " minutos "
+			  << t   << " segundos " << std::endl;
+	return 0;
+}
+
+***************************************************************************
+
+#ifndef TEMPERATURA_H_
+#define TEMPERATURA_H_
+
+class Temperatura {
+	private:
+		float kelvin;
+	public:
+		Temperatura (float = 0);
+		void  setTempKelvin(float);
+		void  setTempFahrenheit(float);
+		void  setTempCelsius(float);
+
+		float getTempKelvin();
+		float getTempFahrenheit();
+		float getTempCelsius();
+};
+
+#endif
+
+
+#include "Temperatura.hpp"
+#include <iostream>
+#include <math.h>
+
+Temperatura::Temperatura(float k) {
+	kelvin = k;
+}
+
+void Temperatura::setTempKelvin(float k) {
+	kelvin = k;
+}
+
+void Temperatura::setTempFahrenheit(float f) {
+	kelvin = round((f + 459.67) * (5.0/9.0));
+}
+
+void Temperatura::setTempCelsius(float c) {
+	kelvin = round(c + 273.15);
+}
+
+float Temperatura::getTempKelvin() {
+	std::cout << "Kelvin: " << kelvin << std::endl;
+	return kelvin;
+}
+
+float Temperatura::getTempFahrenheit() {
+	float v = kelvin * (9.0/5.0) - 459.67;
+	std::cout << "Fahrenheit: " << v << std::endl;
+	return v;
+}
+
+float Temperatura::getTempCelsius() {
+	float v = kelvin - 273.15;
+	std::cout << "Celsius: " << v << std::endl;
+	return v;
+}
+
+
+
+#include "Temperatura.hpp"
+#include <iostream>
+#include <string>
+
+int main(int argc, char *argv[]) {
+	float temp;
+	std::string grado;
+	Temperatura t;
+
+	std::cout << "Ingrese temperatura: ";
+	std::cin  >> temp;
+	std::cout << std::endl;
+
+	std::cout << "Ingrese (K)elvin, (F)ahrenheit o (C)elsius: ";
+	std::cin  >> grado;
+	std::cout << std::endl;
+
+	if (grado == "K" || grado == "k") {
+		t.setTempKelvin(temp);
+	} else if (grado == "F" || grado == "f") {
+		t.setTempFahrenheit(temp);
+	} else if (grado == "C" || grado == "c") {
+		t.setTempCelsius(temp);
+	} else {
+		std::cout << "Por favor, sólo [KkFfCc]" << std::endl;
+		return -1;
+	}
+
+	t.getTempKelvin();
+	t.getTempFahrenheit();
+	t.getTempCelsius();
+
+	return 0;
+}
+
+***************************************************************************
+
+#ifndef FRACCION_H_
+#define FRACCION_H_
+
+class Fraccion {
+	private:
+		int num;
+		int den;
+	public:
+		Fraccion (int = 1, int = 1);
+		double calcular();
+		double reducir();
+};
+
+
+#endif
+
+
+
+#include "Fraccion.hpp"
+#include <iostream>
+
+Fraccion::Fraccion(int n, int d) {
+	if (d == 0) {
+		std::cout << "El denominador no puede ser 0" << std::endl;
+		std::cout << "Usando 1 en su lugar" << std::endl;
+		den = 1;
+	} else {
+		den = d;
+	}
+
+	num = n;
+}
+
+
+double Fraccion::calcular() {
+	double res = (num*1.0)/(den*1.0);
+	return res;
+}
+
+
+
+#include "Fraccion.hpp"
+#include <iostream>
+
+int main() {
+	int     num;
+	int     den;
+	double res;
+
+	std::cout << "Numerador: ";
+	std::cin  >> num;
+
+	std::cout << "Denominador: ";
+	std::cin  >> den;
+	std::cout << std::endl;
+
+	Fraccion f(num, den);
+
+	res = f.calcular();
+	std::cout << "Resultado: " << res << std::endl;
+
+	return 0;
+}
+
+***************************************************************************
+
+#ifndef COORDENADA_H_
+#define COORDENADA_H_
+
+class Coordenada {
+	private:
+		double x;
+		double y;
+		double z;
+	public:
+		Coordenada (double = 0, double = 0, double = 0);
+		double obtenerX();
+		double obtenerY();
+		double obtenerZ();
+};
+
+#endif
+
+
+#include "Coordenada.h"
+#include <iostream>
+
+Coordenada::Coordenada(double xx, double yy, double zz) : 
+	x(xx), y(yy), z(zz) { }
+
+double Coordenada::obtenerX() {
+	return x;
+}
+
+double Coordenada::obtenerY() {
+	return y;
+}
+
+double Coordenada:obtenerZ() {
+	return z;
+}
+
+
+
+#ifndef RECTANGULO_H_
+#define RECTANGULO_H_
+
+#include "Coordenada.h"
+
+class Rectangulo {
+	private:
+		Coordenada superiorIzq;
+		Coordenada inferiorDer;
+	public:
+		Rectangulo();
+		Rectangulo(double xSupIzq, double ySupIzq, double zSupIzq,
+				   double xInfDer, double yInfDer, double zInfDer);
+		Rectangulo(Coordenada supIzq, Coordenada infDer);
+
+		void imprimeEsq();
+		Coordenada obtieneSupIzq();
+		Coordenada obtieneInfDer();
+		double obtieneArea();
+};
+
+#endif
+
+
+
+
+#include "Rectangulo.h"
+#include <iostream>
+
+Rectangulo::Rectangulo() : superiorIzq(0, 0), inferiorDer(0, 0) { }
+
+
+Rectangulo::Rectangulo(double xSupIzq, double ySupIzq, double zSupIzq,
+		               double xInfDer, double yInfDer, double zInfDer) : 
+	superiorIzq(xSupIzq, ySupIzq, zSupIzq),
+	inferiorDer(xInfDer, yInfDer, zInfDer) { }
+
+Rectangulo::Rectangulo(Coordenada supIzq, Coordenada infDer) :
+	superiorIzq(supIzq.obtenerX(), supIzq.obtenerY(), supIzq.obtenerZ()),
+	inferiorDer(infDer.obtenerX(), infDer.obtenerY(), infDer.obtenerZ()) { }
+
+void Rectangulo::imprimeEsq() {
+	std::cout << "Sup izq:" << std::endl;
+	std::cout << "[x]: " << superiorIzq.obtenerX() << std::endl;
+	std::cout << "[y]: " << superiorIzq.obtenerY() << std::endl;
+	std::cout << "[z]: " << superiorIzq.obtenerZ() << std::endl;
+
+	std::cout << "Inf der:" << std::endl;
+	std::cout << "[x]: " << inferiorDer.obtenerX() << std::endl;
+	std::cout << "[y]: " << inferiorDer.obtenerY() << std::endl;
+	std::cout << "[z]: " << inferiorDer.obtenerZ() << std::endl;
+}
+
+Coordenada Rectangulo::obtieneSupIzq() {
+	return superiorIzq;
+}
+
+Coordenada Rectangulo::obtieneInfDer() {
+	return inferiorDer;
+}
+
+double Rectangulo::obtieneArea() {
+	/* TODO: Fix */
+	double alto  = obtieneSupIzq().obtenerY() -
+		           obtieneInfDer().obtenerY();
+	double ancho = obtieneInfDer().obtenerX() -
+				   obtieneSupIzq().obtenerX();
+
+	return alto * ancho;
+}
+
+
+
+
+#ifndef ORTOEDRO_H_
+#define ORTOEDRO_H_
+
+#include "Rectangulo.h"
+
+class Ortoedro {
+	private:
+		// Rectangulo caras[6]; /* Por sencillez es mejor individuales */
+		Rectangulo sup, inf, izq, der, ala, aca;
+	public:
+		Ortoedro(Coordenada infIzqAla, Coordenada supDerAca);
+		void   obtieneVertices();
+		double obtieneArea();
+		double obtieneVolumen();
+};
+
+
+#endif
+
+
+
+#include "Ortoedro.h"
+#include "Rectangulo.h"
+#include "Coordenada.h"
+#include <iostream>
+
+Ortoedro::Ortoedro(Coordenada infIzqAla, Coordenada supDerAca) {
+	
+	if (supDerAca.obtenerX() <= infIzqAla.obtenerX() ||
+		supDerAca.obtenerY() <= infIzqAla.obtenerY() ||
+		supDerAca.obtenerZ() <= infIzqAla.obtenerZ()) {
+		std::cout << "El primer punto tiene que estar más cerca del eje \
+			en todas sus coordenadas" << std::endl;
+		return;
+	}
+
+
+	sup(Coordenada(supDerAca.obtenerX(),
+				   supDerAca.obtenerY(),
+				   supDerAca.obtenerZ()),
+		Coordenada(infIzqAla.obtenerX(),
+				   infIzqAla.obtenerY(),
+				   supDerAca.obtenerZ()));
+
+	inf(Coordenada(infIzqAla.obtenerX(),
+				   infIzqAla.obtenerY(),
+				   infIzqAla.obtenerZ()),
+		Coordenada(supDerAca.obtenerX(),
+				   supDerAca.obtenerY(),
+				   infIzqAla.obtenerZ()));
+
+	izq(Coordenada(infIzqAla.obtenerX(),
+				   infIzqAla.obtenerY(),
+				   infIzqAla.obtenerZ(),
+		Coordenada(infIzqAla.obtenerX(),
+				   supDerAca.obtenerY(),
+				   supDerAca.obtenerZ()));
+
+	der(Coordenada(supDerAca.obtenerX(),
+				   supDerAca.obtenerY(),
+				   supDerAca.obtenerZ()),
+		Coordenada(supDerAca.obtenerX(),
+				   infIzqAla.obtenerY(),
+				   infIzqAla.obtenerZ()));
+
+	ala(Coordenada(infIzqAla.obtenerX(),
+			       infIzqAla.obtenerY(),
+				   infIzqAla.obtenerZ()),
+		Coordenada(supDerAca.obtenerX(),
+				   infIzqAla.obtenerY(),
+				   supDerAca.obtenerZ()));
+
+	aca(Coordenada(supDerAca.obtenerX(),
+				   supDerAca.obtenerY(),
+				   supDerAca.obtenerZ()),
+		Coordenada(infIzqAla.obtenerX(),
+				   supDerAca.obtenerY(),
+				   infIzqAla.obtenerZ()));
+
+}
+
+***************************************************************************
+
+
