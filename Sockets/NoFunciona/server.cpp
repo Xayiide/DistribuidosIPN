@@ -1,20 +1,25 @@
+#include "PaqueteDatagrama.h"
 #include "SocketDatagrama.h"
-#include <iostream>
+
+#include <stdio.h>
+
 
 int main() {
-	// int nums[2];
-	// int res;
-	// socklen_t clilen;
 
-	SocketDatagrama sockSrv = SocketDatagrama(7200);
-	// clilen = sizeof(sockaddr_in);
+	SocketDatagrama sckt(7200);
+	PaqueteDatagrama pkt1(2 * sizeof(int));
 
-	PaqueteDatagrama pkt = PaqueteDatagrama(2 * sizeof(char));
+	sckt.recibe(pkt1);
 
-	while (1) {
-		std::cout << "Recibiendo datos...\n";
-		sockSrv.recibe(pkt);
-		std::cout << "Hemos recibido: " << pkt.obtieneDatos() << "\n";
-		
-	}
+	char *nums = pkt1.obtieneDatos();
+	int num1 = (int) nums[0];
+	int num2 = (int) nums[1];
+
+	int res = num1 + num2;
+
+	PaqueteDatagrama pkt2((char *) res, sizeof(res), "127.0.0.1", pkt1.obtienePuerto());
+
+	sckt.envia(pkt2);
+
+	return 0;
 }

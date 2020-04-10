@@ -1,47 +1,19 @@
-#include "SocketDatagrama.h"
 #include "PaqueteDatagrama.h"
-#include <random>       /* random    */
-#include <time.h>       /* time()    */
-#include <sys/socket.h> /* inet_addr */
-#include <netinet/in.h> /* inet_addr */ 
-#include <arpa/inet.h>  /* inet_addr */ 
-#include <iostream>     /* std::cout */
-#include <unistd.h>     /* close */
+#include "SocketDatagrama.h"
+
+#include <stdio.h>
 
 int main() {
-	int num[2];
+	int nums[2] = {10, 15};
 
-	srand(time(NULL));
-	num[0] = std::rand() % 10 + 1; /* 1 - 10 */
-	num[1] = std::rand() % 10 + 1;
-	std::cout << "num[0]: " << num[0] << "\n";
-	std::cout << "num[1]: " << num[1] << "\n";
+	PaqueteDatagrama pqt1((char *) nums, sizeof(nums), "127.0.0.1", 7200);
+	PaqueteDatagrama pqt2(sizeof(int));
+	SocketDatagrama  sckt(0);
 
-	SocketDatagrama sockClnt = SocketDatagrama(10000); /* Assign any port */
+	sckt.envia(pqt1);
+	sckt.recibe(pqt2);
 
-	/* Lo que vamos a enviar en realidad son dos caracteres que representan
-	   dos numeros */
-	PaqueteDatagrama pkt = PaqueteDatagrama(2 * sizeof(char));
-	pkt.inicializaDatos((char *) num); /* Datos que vamos a enviar al serv */
-	pkt.inicializaIp("127.0.0.1"); /* IP del servidor */
-	pkt.inicializaPuerto(7200); /* Puerto en el que escucha el servidor */
-
-
-	char *ipclient   = sockClnt.getlocal();
-	char *ipserver   = sockClnt.getoutter();
-	int   portclient = sockClnt.getlocalport();
-	int   portserver = sockClnt.getoutterport();
-	std::cout << "[Client]: " << ipclient << ":" << portclient << "\n";
-	std::cout << "[Server]: " << ipserver << ":" << portserver << "\n";
-	std::cout << "[Server]: " << pkt.obtieneDireccion() << ":" << pkt.obtienePuerto() << "\n";
-	
-	std::cout << "Enviando los dos enteros...\n";
-	sockClnt.envia(pkt);
-	sockClnt.recibe(pkt);
-
-	std::cout << "El resultado es: " << pkt.obtieneDatos() << "\n";
-	sockClnt.~SocketDatagrama();
-	pkt.~PaqueteDatagrama();
+	printf("Hemos enviado: %d y %d, y nos han devuelto: %d\n", nums[0], nums[1], pqt2.obtieneDatos());
 
 	return 0;
 }

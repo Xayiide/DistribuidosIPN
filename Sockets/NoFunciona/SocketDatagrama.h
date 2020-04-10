@@ -1,28 +1,26 @@
 #ifndef SOCKETDATAGRAMA_H_
 #define SOCKETDATAGRAMA_H_
 
-#include <netinet/in.h>       /* sockaddr_in */
-#include "PaqueteDatagrama.h" /* PaqueteDatagrama */
+#include "PaqueteDatagrama.h"
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+
 
 class SocketDatagrama {
 	public:
 		SocketDatagrama(int);
 		~SocketDatagrama();
 
-		int recibe(PaqueteDatagrama &p); /* Recibe un paquete datagrama */
-		int envia(PaqueteDatagrama &p);  /* Envia un paquete datagrama */
-
-		char *getlocal();
-		char *getoutter();
-		int   getlocalport();
-		int   getoutterport();
-
+		int recibe(PaqueteDatagrama &p);
+		int envia(PaqueteDatagrama &p);
 
 	private:
 		struct sockaddr_in direccionLocal;
 		struct sockaddr_in direccionForanea;
-		int                s; /* ID socket */
+		int s;
 };
-
 
 #endif /* SOCKETDATAGRAMA_H_ */
