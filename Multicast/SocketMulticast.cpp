@@ -1,5 +1,15 @@
-#include <SocketMulticast.h>
-
+#include "SocketMulticast.h" 
+#include <iostream>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <strings.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <errno.h>
+using namespace std;
 SocketMulticast::SocketMulticast(int port)
 {
 	s=socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);

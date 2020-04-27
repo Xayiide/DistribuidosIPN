@@ -1,3 +1,7 @@
+#include "PaqueteDatagrama.h"
+#include <netinet/in.h>
+
+
 #ifndef SOCKETMULTICAST_H_
 #define SOCKETMULTICAST_H_
 class SocketMulticast{
@@ -14,5 +18,5 @@ private:
 int s; //ID socket
 struct ip_mreq multicast;
 struct sockaddr_in direccionLocal;
-struct sockaddr_in direccionLocal;
+struct sockaddr_in direccionForanea;
 #endif
