@@ -1,60 +1,103 @@
-#include <SocketMulticast.h>
+#include "headers/SocketMulticast.h" 
 
-SocketMulticast::SocketMulticast(int port)
-{
-	s=socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	 bzero((char *)&direccionLocal, sizeof(direccionLocal));
-    //bzero((char *)&direccionForanea, sizeof(direccionForanea));
-    direccionLocal.sin_family = AF_INET;
-    direccionLocal.sin_addr.s_addr = INADDR_ANY;
-    direccionLocal.sin_port = htons(port);
-    bind(s, (struct sockaddr *)&direccionLocal, sizeof(direccionLocal));
-}
-SocketMulticast::~SocketMulticast()
-{
-    close(s);
-}
-int SocketMulticast::envía(PaqueteDatagrama &p, unsigned char ttl)
-{
-	int cliente = setsockopt(s, IPPROTO_IP, IP_MULTICAST_TTL, (void *) &ttl, sizeof(ttl));
-	int r;
-        bzero((char *)&direccionForanea, sizeof(direccionForanea));
-        direccionForanea.sin_family = AF_INET;
-        direccionForanea.sin_addr.s_addr = inet_addr(p.obtieneDireccion());
-        direccionForanea.sin_port = htons(p.obtienePuerto());
-        r = sendto(s, p.obtieneDatos(), p.obtieneLongitud(), 0, (struct sockaddr *)&direccionForanea, (socklen_t*)&cliente);
+#include <iostream>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <strings.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <errno.h>
 
+SocketMulticast::SocketMulticast(int puerto) {
+	s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
+
+	int reuse = 1;
+	if (setsockopt(s, SOL_SOCKET, SO_REUSEPORT, &reuse, sizeof(reuse)) == -1) {
+		printf("Error al llamar a la función setsockopt\n");
+		exit(0);
+	}
+
+	/* Empty direccionLocal */
+	bzero((char *)&direccionLocal, sizeof(direccionLocal));
+
+	/* Fill direccionLocal */
+	direccionLocal.sin_family      = AF_INET;
+	direccionLocal.sin_addr.s_addr = INADDR_ANY;  // inet_addr(argv[1])
+	direccionLocal.sin_port        = htons(puerto);
+
+	/* bind socket */
+	bind(s, (struct sockaddr *) &direccionLocal, sizeof(direccionLocal));
 }
-int SocketMulticast::recibe(PaqueteDatagrama &p)
-{
-	int cliente=setsockopt(s, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void *) &multicast, sizeof(multicast));
-	char datos[p.obtieneLongitud()];
-    bzero((char *)&direccionForanea, sizeof(direccionForanea));
-    socklen_t direccionForaneaLen = sizeof(direccionForanea);
-    int tam = recvfrom(s, (char *)datos, p.obtieneLongitud() * sizeof(char), 0, (struct sockaddr *)&direccionForanea, &cliente);
-    char ip[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &(direccionForanea.sin_addr), ip, INET_ADDRSTRLEN);
-    p.inicializaIp(ip);
-    p.inicializaPuerto((int)ntohs(direccionForanea.sin_port));
-    p.inicializaDatos(datos);
-    return tam;
+
+SocketMulticast::~SocketMulticast() {
+	close(s);
 }
-void SocketMulticast::unirseGrupo(char *ip)
-{
-	int result;
+
+void SocketMulticast::unirseGrupo(char *ip) {
 	multicast.imr_multiaddr.s_addr = inet_addr(ip);
 	multicast.imr_interface.s_addr = htonl(INADDR_ANY);
-	result=setsockopt(s, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void *) &multicast, sizeof(multicast));
-	if(result<0)
-		cout<<"Error al unirse al grupo\n";
-	else
-		cout<<"Te uniste al grupo\n";
+
+	int res = setsockopt(s, 
+						 IPPROTO_IP, 
+						 IP_ADD_MEMBERSHIP, 
+						 (void *) &multicast, 
+						 sizeof(multicast));
+
+	if (res<0) std::cout << "No te uniste el grupo\n";
+	else       std::cout << "Te uniste al grupo " << ip << "\n";
 }
-void SocketMulticast::salirseGrupo(char *ip)
-{
-	if ( multicast.imr_multiaddr.s_addr == inet_addr(ip) ) {
-        	setsockopt(s, IPPROTO_IP, IP_DROP_MEMBERSHIP, (void *) &multicast, sizeof(multicast));       
-		cout<<"Saliste del grupo"<<endl;
-    }else{
-		cout<<"Error al salir del grupo"<<endl;
+
+void SocketMulticast::salirseGrupo(char *ip) {
+	if (multicast.imr_multiaddr.s_addr == inet_addr(ip))
+		setsockopt(s,
+				   IPPROTO_IP,
+				   IP_DROP_MEMBERSHIP,
+				   (void *) &multicast,
+				   sizeof(multicast));       
 }
+
+int SocketMulticast::envia(PaqueteDatagrama &pd, unsigned char ttl) {
+	int n = setsockopt(s, IPPROTO_IP, IP_MULTICAST_TTL, (void *) &ttl, sizeof(ttl));
+
+	if (n < 0) {
+		fprintf(stderr, "Ha ocurrido un error al enviar el paquete\n");
+	} else { /* No error */
+		int clilen = sizeof(direccionForanea);
+
+		/* Empty direccionForanea */
+		bzero((char *) &direccionForanea, sizeof(direccionForanea));
+
+		/* Fill direccionForanea */
+		direccionForanea.sin_family      = AF_INET;
+		direccionForanea.sin_addr.s_addr = inet_addr(pd.obtieneDireccion());
+		direccionForanea.sin_port        = htons(pd.obtienePuerto());
+
+		sendto(s,
+			   pd.obtieneDatos(),
+			   pd.obtieneLongitud(),
+			   0,
+			   (struct sockaddr *) &direccionForanea,
+			   (socklen_t) clilen);
+	}
+
+	/* return n */
+}
+
+int SocketMulticast::recibe(PaqueteDatagrama &pd) {
+	int clilen = sizeof(direccionForanea);
+
+	int n = recvfrom(s,
+                     pd.obtieneDatos(),
+                     pd.obtieneLongitud(),
+                     0,
+                     (struct sockaddr *) &direccionForanea,
+                     (socklen_t*) &clilen);
+	pd.inicializaIp(inet_ntoa(direccionForanea.sin_addr));
+	pd.inicializaPuerto(ntohs(direccionForanea.sin_port));
+	
+	return n;
+}
+
